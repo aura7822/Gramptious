@@ -1,4 +1,4 @@
-/* GRAMPTIOUS — content.js */
+
 (function () {
   'use strict';
   if (window.__gramptious) return;

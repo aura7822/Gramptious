@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>GRAMPTIOUS — Analyser</title>
+<title>GRAMPTIOUS™ — The good watch Dog</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -34,8 +34,8 @@ body::after{
 /* ── TOPBAR ── */
 .topbar{
   height:56px;flex-shrink:0;display:flex;align-items:center;gap:14px;padding:0 20px;
-  background:rgba(0,0,0,0.85);
-  border-bottom:1px solid rgba(255,215,0,0.12);
+  background:rgb(64, 0, 0);
+  border-bottom:1px solid rgba(109, 40, 0, 0.862);
   backdrop-filter:blur(20px);
   position:relative;z-index:100;
 }
@@ -44,47 +44,63 @@ body::after{
   background:linear-gradient(90deg,transparent,var(--gold),var(--red),var(--gold),transparent);
   opacity:.4;
 }
-.t-logo{display:flex;align-items:center;gap:10px;}
-.t-gem{
-  width:34px;height:34px;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(135deg,var(--gold2),var(--gold));
-  border-radius:7px;font-size:18px;font-weight:900;color:#000;
-  box-shadow:0 0 16px rgba(255,215,0,0.5),inset 0 1px 0 rgba(255,255,255,0.3);
+.t-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.t-gem {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1px;
+  border: 0px solid var(--gold2);
+  overflow: hidden; /* Ensures image stays inside the box */
+}
+
+.t-gem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   /* or contain */
+  display: block;
 }
 .t-name{
-  font-size:18px;font-weight:700;letter-spacing:.1em;
+  font-size:15px;font-weight:700;letter-spacing:.1em;
   background:linear-gradient(135deg,var(--gold),#FFF8DC,var(--gold3));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 .t-sub{font-size:9px;color:var(--dim);letter-spacing:.08em;margin-top:1px;}
 .t-sep{width:1px;height:26px;background:rgba(255,215,0,0.1);}
 .t-user{display:flex;align-items:center;gap:8px;}
-.t-avatar{width:28px;height:28px;border-radius:50%;border:1px solid var(--gold2);object-fit:cover;background:var(--dark2);}
+.t-avatar{width:34px;height:34px;border-radius:0%;border:1px solid var(--gold2);object-fit:cover;background:var(--dark2);}
 .t-handle{font-size:12px;color:var(--dim);font-family:var(--mono);}
 .t-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
 .t-badge{font-size:9px;padding:3px 10px;border-radius:3px;font-family:var(--mono);letter-spacing:.06em;}
 .t-badge.gold{color:var(--gold);border:1px solid rgba(255,215,0,0.35);background:rgba(255,215,0,0.05);}
 .t-badge.red{color:var(--red);border:1px solid rgba(220,20,60,0.35);background:rgba(220,20,60,0.05);}
-.t-clock{font-size:11px;color:var(--dim);font-family:var(--mono);}
+.t-clock{font-size:11px;color: var(--red);font-family:var(--mono);}
 .t-scan-btn{
   padding:7px 16px;border:none;border-radius:6px;cursor:pointer;
   font-family:var(--font);font-size:12px;font-weight:700;letter-spacing:.08em;
   background:linear-gradient(135deg,var(--gold2),var(--gold));color:#000;
   box-shadow:0 0 12px rgba(255,215,0,0.25);transition:all .15s;
 }
-.t-scan-btn:hover{box-shadow:0 0 20px rgba(255,215,0,0.4);transform:translateY(-1px);}
+.t-scan-btn:hover{box-shadow:0 0 0px rgb(0, 0, 0);transform:translateY(-6px);}
 .t-scan-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
 /* ── LAYOUT ── */
 .layout{display:flex;flex:1;overflow:hidden;}
 /* ── SIDEBAR ── */
 .sidebar{
   width:210px;flex-shrink:0;display:flex;flex-direction:column;
-  background:rgba(0,0,0,0.7);
+  background:rgb(0, 0, 0);
   border-right:1px solid rgba(255,215,0,0.08);
   backdrop-filter:blur(12px);
 }
 .sb-section{padding:14px 10px 6px;}
-.sb-label{font-size:9px;letter-spacing:.12em;color:var(--dim);padding:0 8px;margin-bottom:6px;font-family:var(--mono);}
+.sb-label{font-size:12px;letter-spacing:.12em;color:var(--dim);padding:0 8px;margin-bottom:6px;font-family:var(--mono);}
 .nav-item{
   display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:7px;
   cursor:pointer;font-size:13px;font-weight:600;letter-spacing:.03em;
@@ -321,7 +337,7 @@ input[type=range].red::-webkit-slider-thumb{background:var(--red);box-shadow:0 0
 /* ── RIGHT PANEL — LIVE PREVIEW ── */
 .right-panel{
   width:260px;flex-shrink:0;display:flex;flex-direction:column;
-  background:rgba(0,0,0,0.6);border-left:1px solid rgba(255,215,0,0.08);
+  background:rgb(0, 0, 0);border-left:1px solid rgba(77, 38, 1, 0.649);
   backdrop-filter:blur(12px);
 }
 .rp-header{
@@ -360,7 +376,7 @@ input[type=range].red::-webkit-slider-thumb{background:var(--red);box-shadow:0 0
 .center-state{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:40px;
 }
-.cs-gem{font-size:64px;filter:drop-shadow(0 0 24px rgba(255,215,0,0.5));animation:float 3s ease-in-out infinite;}
+.cs-gem{font-size:64px;filter:drop-shadow(0 0 24px rgb(0, 0, 0));animation:float 3s ease-in-out infinite;}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 .cs-title{font-size:26px;font-weight:700;letter-spacing:.1em;
   background:linear-gradient(135deg,var(--gold),#FFF8DC,var(--gold3));
@@ -424,37 +440,39 @@ input[type=range].red::-webkit-slider-thumb{background:var(--red);box-shadow:0 0
 <div class="modal-overlay" id="warnModal">
   <div class="modal">
     <div class="modal-icon">⚠</div>
-    <div class="modal-title">IMPORTANT WARNING</div>
+    <div class="modal-title">CAUTION TIP!</div>
     <div class="modal-body">
-      <strong>Using automated unfollow/follow tools may violate Instagram's Terms of Service</strong> and can result in
+      <strong>Deploying  automated unfollow/follow tools highly  violate Instagram's Terms of Service</strong> and can result in
       <span class="highlight">temporary or permanent account restrictions, action blocks, or bans.</span>
       <br/><br/>
       Instagram enforces strict rate limits: approximately <strong>60 unfollows per hour</strong> and
       <strong>150–200 per day</strong>. Exceeding these thresholds triggers automated detection systems.
       <br/><br/>
-      GRAMPTIOUS enforces safe intervals between actions to minimize risk, but
-      <strong>you use this tool entirely at your own risk</strong>. We recommend using manual actions
+      GRAMPTIOUS™ enforces safe intervals between actions to minimize risk, but
+      <strong>you use this tool entirely at your own risk, no author is to be responsible incase of account banning </strong>. We recommend using manual actions
       where possible and never running mass operations on new accounts.
     </div>
     <button class="modal-close" id="warnClose">I UNDERSTAND — PROCEED</button>
   </div>
-</div>
+</div> 
 
 <!-- Topbar -->
 <div class="topbar">
   <div class="t-logo">
-    <div class="t-gem">G</div>
-    <div><div class="t-name">GRAMPTIOUS</div><div class="t-sub">INSTAGRAM INTELLIGENCE</div></div>
+    <div class="t-gem">
+     <img src="../assets/icons/juice.png" alt="logo" />
+    </div>
+    <div><div class="t-name">GRAMPTIOUS™</div><div class="t-sub">INSTAGRAM KEEPER</div></div>
   </div>
   <div class="t-sep"></div>
   <div class="t-user">
-    <img class="t-avatar" id="tAvatar" src="" alt=""/>
+    <img class="t-avatar" id="tAvatar" src="" alt=" prof pic"/>
     <span class="t-handle" id="tHandle">@—</span>
   </div>
   <div class="t-right">
     <span class="t-badge gold" id="lastBadge" hidden></span>
     <span class="t-clock" id="clock"></span>
-    <button class="t-scan-btn" id="scanBtn">◈ SCAN</button>
+    <button class="t-scan-btn" id="scanBtn">⚖ SCAN</button>
   </div>
 </div>
 
@@ -462,20 +480,20 @@ input[type=range].red::-webkit-slider-thumb{background:var(--red);box-shadow:0 0
   <!-- Sidebar -->
   <div class="sidebar">
     <div class="sb-section">
-      <div class="sb-label">// DASHBOARD</div>
+      <div class="sb-label">⮚ PANEL</div>
       <div class="nav-item active" data-tab="overview"><span class="nav-icon">◉</span>Overview<span class="nav-count" id="nc-ov">—</span></div>
     </div>
     <div class="sb-section">
-      <div class="sb-label">// ANALYSIS</div>
+      <div class="sb-label">🗠 ANALYSIS</div>
       <div class="nav-item" data-tab="nonFollowers"><span class="nav-icon">⊘</span>Non-Followers<span class="nav-count" id="nc-nf">—</span></div>
-      <div class="nav-item" data-tab="fanZone"><span class="nav-icon">★</span>Fan Zone<span class="nav-count" id="nc-fz">—</span></div>
+      <div class="nav-item" data-tab="fanZone"><span class="nav-icon">★</span>Followers <span class="nav-count" id="nc-fz">—</span></div>
       <div class="nav-item" data-tab="mutuals"><span class="nav-icon">⇄</span>Mutuals<span class="nav-count" id="nc-mu">—</span></div>
-      <div class="nav-item red" data-tab="lostFollowers"><span class="nav-icon">📉</span>Lost Followers<span class="nav-count" id="nc-lf">—</span></div>
+      <div class="nav-item red" data-tab="lostFollowers"><span class="nav-icon">💁</span>Unfollowers<span class="nav-count" id="nc-lf">—</span></div>
     </div>
     <div class="sb-divider"></div>
     <div class="sb-section">
-      <div class="sb-label">// AUTOMATION</div>
-      <div class="nav-item" data-tab="autoMode"><span class="nav-icon">⚡</span>Auto Actions</div>
+      <div class="sb-label">🕱 AUTOMATION</div>
+      <div class="nav-item" data-tab="autoMode"><span class="nav-icon">🖥</span>Auto Actions</div>
     </div>
     <div class="sb-bottom">
       <button class="warn-btn" id="warnAgainBtn">⚠ Safety Warning</button>
@@ -487,10 +505,10 @@ input[type=range].red::-webkit-slider-thumb{background:var(--red);box-shadow:0 0
 
     <!-- Welcome state -->
     <div class="center-state view" id="viewWelcome">
-      <div class="cs-gem">◆</div>
+      <div class="cs-gem">߷</div>
       <div class="cs-title">ANALYSER READY</div>
-      <div class="cs-sub">SESSION DETECTED — NO PASSWORD REQUIRED<br/>CLICK SCAN TO BEGIN ANALYSIS</div>
-      <div class="cs-arrow">◀ CLICK SCAN</div>
+      <div class="cs-sub">SESSION DETECTED — AUTHENTICATION UNECCESARY<br/>CLICK SCAN TO BEGIN ANALYSIS</div>
+      <div class="cs-arrow"> CLICK SCAN [top right] ⤤</div>
     </div>
 
     <!-- Scanning state -->
@@ -584,17 +602,17 @@ input[type=range].red::-webkit-slider-thumb{background:var(--red);box-shadow:0 0
 
   <!-- Right panel — Live Preview -->
   <div class="right-panel">
-    <div class="rp-header"><div class="rp-dot"></div>LIVE PREVIEW</div>
+    <div class="rp-header"><div class="rp-dot"></div>LIVE UPDATES</div>
     <div class="rp-counters">
-      <div class="rpc"><div class="rpc-n green" id="rpDone">0</div><div class="rpc-l">DONE</div></div>
-      <div class="rpc"><div class="rpc-n yellow" id="rpPend">0</div><div class="rpc-l">PENDING</div></div>
-      <div class="rpc"><div class="rpc-n red" id="rpErr">0</div><div class="rpc-l">ERRORS</div></div>
+      <div class="rpc"><div class="rpc-n green" id="rpDone">0.0</div><div class="rpc-l">DONE</div></div>
+      <div class="rpc"><div class="rpc-n yellow" id="rpPend">0.0</div><div class="rpc-l">PENDING</div></div>
+      <div class="rpc"><div class="rpc-n red" id="rpErr">0.0</div><div class="rpc-l">ERRORS</div></div>
     </div>
-    <div class="rp-log" id="rpLog"><div style="padding:20px;text-align:center;font-family:monospace;font-size:10px;color:var(--dim);">// AWAITING ACTIONS</div></div>
+    <div class="rp-log" id="rpLog"><div style="padding:20px;text-align:center;font-family:monospace;font-size:10px;color:var(--dim);">NOTIFICATIONS WILL APPEAR HERE</div></div>
   </div>
 </div>
 
-<div class="footer">GRAMPTIOUS v3.0 // ALL DATA LOCAL // NO SERVERS // SESSION-ONLY ACCESS // USE RESPONSIBLY</div>
+<div class="footer">GRAMPTIOUS® copyright © 2026 Aura Joshua - Responsibility Recommended</div>
 <script src="dashboard.js"></script>
 </body>
 </html>

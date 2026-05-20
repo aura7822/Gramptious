@@ -1,4 +1,4 @@
-/* GRAMPTIOUS — service-worker.js */
+
 'use strict';
 var igTabId = null;
 
