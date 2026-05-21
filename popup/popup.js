@@ -1,3 +1,4 @@
+function makeAvatar(u){var i=(u||'?').slice(0,2).toUpperCase();var c=['#8B0000','#B8860B','#6B0020'][u.charCodeAt(0)%3];var s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect width="40" height="40" fill="'+c+'" opacity="0.2"/><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="'+c+'" font-size="15" font-weight="700">'+i+'</text></svg>';return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(s);}
 /* GRAMPTIOUS — popup.js */
 'use strict';
 var igTabId = null;
@@ -8,7 +9,7 @@ function showConnected(user,lastScan){
   $('viewNotIG').hidden=true;$('viewConnected').hidden=false;
   $('accountName').textContent=user.fullName||user.username;
   $('accountHandle').textContent='@'+user.username;
-  var av=$('avatar'); av.src=user.profilePicUrl||''; av.alt=user.username;
+  var av=$('avatar'); av.src=makeAvatar(user.username); av.alt=user.username;
   if(lastScan&&lastScan.stats){
     $('stFol').textContent=lastScan.stats.followingCount;
     $('sFer') && ($('sFer').textContent=lastScan.stats.followersCount);

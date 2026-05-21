@@ -177,7 +177,20 @@ function updateTopbar(){
 }
 
 /* ─── List rendering ─────────────────────────────────────────────────────────── */
-var FALLBACK='data:image/svg+xml,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 viewBox%3D%220 0 40 40%22%3E%3Crect width%3D%2240%22 height%3D%2240%22 fill%3D%22%231C1608%22%2F%3E%3Ctext x%3D%2250%25%22 y%3D%2255%25%22 dominant-baseline%3D%22middle%22 text-anchor%3D%22middle%22 fill%3D%22%236B5530%22 font-size%3D%2218%22%3E%3F%3C%2Ftext%3E%3C%2Fsvg%3E';
+/* Load avatars via content script proxy — bypasses Instagram CDN CORS block */
+
+function makeAvatar(username) {
+  var initials = (username || '?').slice(0,2).toUpperCase();
+  var colors = ['#8B0000','#B8860B','#6B0020','#7A5C00','#5C0000','#4A3800','#990000','#DAA520'];
+  var c = colors[username.charCodeAt(0) % colors.length];
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">'
+    + '<rect width="40" height="40" fill="' + c + '" opacity="0.25"/>'
+    + '<rect width="40" height="40" fill="none" stroke="' + c + '" stroke-width="1" opacity="0.6"/>'
+    + '<text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" '
+    + 'fill="' + c + '" font-size="15" font-family="Calibri,sans-serif" font-weight="700">'
+    + initials + '</text></svg>';
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
 
 var actionedUsers={};// track per-user action state
 
@@ -228,8 +241,8 @@ function renderList(containerId,users,opts){
     var awrap=document.createElement('div');awrap.className='row-avatar-wrap';
     var av=document.createElement('img');
     av.className='row-avatar'+(u.isPrivate?' private':'')+(u.isVerified?' verified':'');
-    av.src=u.profilePicUrl||FALLBACK;av.alt=u.username;av.width=38;av.height=38;
-    av.addEventListener('error',function(){this.src=FALLBACK;});
+    av.alt=u.username;av.width=38;av.height=38;
+    av.src=makeAvatar(u.username);
     awrap.appendChild(av);
     if(u.isVerified){
       var tick=document.createElement('div');tick.className='verified-tick';tick.textContent='✓';
@@ -704,7 +717,7 @@ async function init(){
   });
   if(!ur||!ur.user){showState('error');setErr('Could not read Instagram session. Refresh instagram.com and relaunch.');return;}
   currentUser=ur.user;
-  $('tAvatar').src=currentUser.profilePicUrl||'';
+  $('tAvatar').src=makeAvatar(currentUser.username);
   $('tAvatar').alt=currentUser.username;
   $('tHandle').textContent='@'+currentUser.username;
 
