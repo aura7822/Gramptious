@@ -157,6 +157,25 @@
         .catch(function(e){ sendResponse({ error: e.message }); });
       return true;
     }
+    if (msg.type === 'FOLLOW_BY_USERNAME') {
+      // Resolve username to userId then follow
+      igFetch('https://www.instagram.com/api/v1/users/web_profile_info/?username=' + encodeURIComponent(msg.username))
+        .then(function(d) {
+          var u = d && d.data && d.data.user;
+          if (!u) throw new Error('USER_NOT_FOUND');
+          return igFetch('https://www.instagram.com/api/v1/friendships/create/' + u.id + '/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'user_id=' + u.id,
+          }).then(function(r) {
+            return { ok: true, userId: String(u.id), username: u.username, fullName: u.full_name || '' };
+          });
+        })
+        .then(function(r){ sendResponse(r); })
+        .catch(function(e){ sendResponse({ ok: false, error: e.message }); });
+      return true;
+    }
+
     if (msg.type === 'UNFOLLOW') {
       unfollowUser(msg.userId)
         .then(function(){ sendResponse({ ok: true }); })

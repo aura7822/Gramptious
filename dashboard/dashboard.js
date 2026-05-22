@@ -628,6 +628,108 @@ function renderAutoMode(){
     lr.appendChild(lb);
   }
   grid.appendChild(lr);
+
+  // ── Mass Follow Any / CSV Import card ──
+  var mfa = makeAutoCard('MASS FOLLOW — ANY ACCOUNTS', '➕', false);
+  mfa.classList.add('full');
+
+  var mfaInfo = document.createElement('p');
+  mfaInfo.style.cssText = 'font-size:11px;color:var(--dim);line-height:1.7;margin-bottom:14px;';
+  mfaInfo.innerHTML = 'Follow any accounts by username — works even with zero followers. '
+    + 'Type manually, paste a list, or upload a CSV. '
+    + '<span style="color:var(--red)">Max ~150 follows/day. Use safe intervals.</span>';
+  mfa.appendChild(mfaInfo);
+
+  var mfaLabel = document.createElement('div');
+  mfaLabel.style.cssText = 'font-size:10px;color:var(--dim);letter-spacing:.08em;margin-bottom:6px;font-family:monospace;';
+  mfaLabel.textContent = '// ENTER USERNAMES (one per line, comma-separated, @ optional)';
+  mfa.appendChild(mfaLabel);
+
+  var mfaTextarea = document.createElement('textarea');
+  mfaTextarea.id = 'mfaTextarea';
+  mfaTextarea.placeholder = 'username1\nusername2\n@username3\nor: user1, user2, user3';
+  mfaTextarea.style.cssText = 'width:100%;height:90px;background:rgba(255,215,0,0.03);border:1px solid rgba(255,215,0,0.15);border-radius:6px;color:var(--text);font-family:monospace;font-size:11px;padding:8px 10px;resize:vertical;outline:none;margin-bottom:10px;line-height:1.6;';
+  mfa.appendChild(mfaTextarea);
+
+  // CSV upload row
+  var csvRow = document.createElement('div');
+  csvRow.style.cssText = 'display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;';
+
+  var csvLabel2 = document.createElement('span');
+  csvLabel2.style.cssText = 'font-size:11px;color:var(--dim);flex:1;';
+  csvLabel2.textContent = 'Or upload a CSV (username column auto-detected):';
+
+  var csvInput = document.createElement('input');
+  csvInput.type = 'file';
+  csvInput.accept = '.csv,.txt';
+  csvInput.style.display = 'none';
+
+  var csvBtn = document.createElement('button');
+  csvBtn.className = 'tb-btn';
+  csvBtn.textContent = '📂 Upload CSV';
+  csvBtn.addEventListener('click', function(){ csvInput.click(); });
+
+  var csvCount = document.createElement('span');
+  csvCount.style.cssText = 'font-family:monospace;font-size:10px;color:var(--gold2);';
+
+  csvInput.addEventListener('change', function(){
+    var file = csvInput.files[0];
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e){
+      var parsed = parseCSVUsernames(e.target.result);
+      mfaTextarea.value = parsed.join('\n');
+      csvCount.textContent = '✓ '+parsed.length+' loaded';
+    };
+    reader.readAsText(file);
+  });
+
+  csvRow.appendChild(csvLabel2);
+  csvRow.appendChild(csvBtn);
+  csvRow.appendChild(csvInput);
+  csvRow.appendChild(csvCount);
+  mfa.appendChild(csvRow);
+
+  // Interval
+  var mfaIntervalVal = settings.interval;
+  mfa.appendChild(makeSlider('Interval between follows','mfa-int',15,120,mfaIntervalVal,'s',function(v){ mfaIntervalVal=v; }));
+
+  // Buttons row
+  var mfaRow = document.createElement('div');
+  mfaRow.style.cssText = 'display:flex;gap:8px;margin-top:12px;align-items:stretch;';
+
+  var previewBtn = document.createElement('button');
+  previewBtn.className = 'tb-btn';
+  previewBtn.textContent = '👁 Preview';
+  previewBtn.addEventListener('click', function(){
+    var u = parseCSVUsernames(mfaTextarea.value);
+    if(!u.length){ addLog('info','No valid usernames found'); return; }
+    addLog('info','📋 '+u.length+' queued: '+u.slice(0,5).join(', ')+(u.length>5?'...':''));
+  });
+
+  var startBtn = document.createElement('button');
+  startBtn.className = 'run-btn gold';
+  startBtn.style.cssText = 'flex:1;margin-top:0;padding:9px;font-size:12px;';
+  startBtn.textContent = '▶ START MASS FOLLOW';
+  startBtn.addEventListener('click', function(){
+    if(!igTabId){ addLog('error','No Instagram tab'); return; }
+    var u = parseCSVUsernames(mfaTextarea.value);
+    if(!u.length){ addLog('info','⚠ Enter at least one username'); return; }
+    followByUsernameQueue(u, mfaIntervalVal);
+  });
+
+  var stopBtn2 = document.createElement('button');
+  stopBtn2.className = 'stop-btn';
+  stopBtn2.style.cssText = 'flex-shrink:0;padding:9px 14px;margin-top:0;';
+  stopBtn2.textContent = '⬛ STOP';
+  stopBtn2.addEventListener('click', function(){ stopActions(); });
+
+  mfaRow.appendChild(previewBtn);
+  mfaRow.appendChild(startBtn);
+  mfaRow.appendChild(stopBtn2);
+  mfa.appendChild(mfaRow);
+  grid.appendChild(mfa);
+
 }
 function renderAutoStatus(running){
   var btn=$('massUnfollowBtn');
@@ -657,6 +759,81 @@ function makeToggle(label,checked,onChange){
   inp.addEventListener('change',function(){onChange(this.checked);});
   tog.appendChild(inp);tog.appendChild(track);
   row.appendChild(lbl);row.appendChild(tog);return row;
+}
+
+
+/* ─── CSV Import & Mass Follow ──────────────────────────────────────────────── */
+
+function parseCSVUsernames(text) {
+  // Accept: plain list, CSV with header, one per line, comma separated
+  var lines = text.split(/\r?\n/).map(function(l){ return l.trim(); }).filter(Boolean);
+  var usernames = [];
+  lines.forEach(function(line) {
+    // Skip header rows
+    if (line.toLowerCase().indexOf('username') !== -1 && usernames.length === 0) return;
+    // Split by comma, take first non-empty token, strip @ and quotes
+    var parts = line.split(',');
+    parts.forEach(function(p) {
+      var u = p.trim().replace(/^[@"']+|["']+$/g, '').trim();
+      if (u && u.length > 0 && u.length < 31 && /^[a-zA-Z0-9._]+$/.test(u)) {
+        usernames.push(u);
+      }
+    });
+  });
+  // Deduplicate
+  return [...new Set(usernames)];
+}
+
+function followByUsernameQueue(usernames, interval) {
+  if (!usernames.length) { addLog('info', 'No usernames to follow'); return; }
+  if (isRunning) { addLog('info', '⚠ Already running — stop first'); return; }
+  isRunning = true;
+  livePend = usernames.length;
+  updateLiveCounts();
+  renderAutoStatus(true);
+  addLog('info', '▶ Starting follow queue: ' + usernames.length + ' accounts');
+
+  var queue = usernames.slice();
+
+  function next() {
+    if (!isRunning || !queue.length) {
+      isRunning = false; livePend = 0;
+      updateLiveCounts(); renderAutoStatus(false);
+      addLog('info', '— Follow queue complete');
+      return;
+    }
+    var username = queue.shift();
+    livePend = queue.length;
+    updateLiveCounts();
+    addLog('pending', '⏳ Following @' + username + '...');
+
+    chrome.tabs.sendMessage(igTabId, { type: 'FOLLOW_BY_USERNAME', username: username }, function(r) {
+      void chrome.runtime.lastError;
+      if (r && r.ok) {
+        liveDone++;
+        actionedUsers[r.userId || username] = 'done';
+        addLog('success', '✓ Followed <strong>@' + (r.username || username) + '</strong>');
+        recordActionHistory('follow');
+      } else {
+        liveErr++;
+        var reason = r ? r.error : 'no response';
+        if (reason === 'USER_NOT_FOUND') {
+          addLog('error', '✗ @' + username + ' — account not found');
+        } else if (reason === 'ACTION_BLOCKED') {
+          addLog('error', '⛔ Blocked by Instagram — stopping queue');
+          isRunning = false; livePend = 0;
+          updateLiveCounts(); renderAutoStatus(false);
+          return;
+        } else {
+          addLog('error', '✗ @' + username + ': ' + reason);
+        }
+      }
+      updateLiveCounts();
+      if (isRunning) setTimeout(next, interval * 1000);
+    });
+  }
+
+  next();
 }
 
 /* ─── CSV Export ─────────────────────────────────────────────────────────────── */
