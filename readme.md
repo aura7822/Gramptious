@@ -118,6 +118,21 @@ git clone https://github.com/aura7822/Gramptious
 # ⚿ Privacy Notice :
 >The program utilises ```manifest.json``` files + content scripting and service workers thus no sensitive account data is garnered - we value your privacy
 
+# BROWSERS CHECKPOINT
+<table><tr><td>■ Supported</td><td>□ Unsupported</td></tr></table>
+<div align="left">
+■ Chromium Ecosystem [Google Chrome, Brave, Edge] 
+
+■ Mozilla Firefox Family
+
+■ Safari ecosystem
+
+□ Opera Mini / GX
+
+□ Samsung Internet
+
+</div>
+
 <a><img src='https://i.imgur.com/LyHic3i.gif'/></a>
  <font size="1">GRAMPTIOUS™ © 2026 Aura Joshua Responsibility Required</font>
 
