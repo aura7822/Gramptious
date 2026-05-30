@@ -86,7 +86,7 @@
 
 </table>
 
-```🛈 This repository will be achived soon for security purposes```
+```🛈 This repo will be achived to avert security concerns```
 
 <a><img src='https://i.imgur.com/LyHic3i.gif'/></a>
 
